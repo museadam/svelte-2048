@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Game } from './game.svelte.ts';
+	import { handleTouchStart, handleTouchEnd } from '../swipe/index.svelte.ts';
 
 	let game = $state(new Game());
 	$inspect(game);
@@ -53,6 +54,19 @@
 	}
 </script>
 
+<div
+	class="swipe-background"
+	role="button"
+	tabindex="0"
+	ontouchstart={handleTouchStart}
+	onkeydown={(e) => console.log()}
+	ontouchend={(e) => {
+		// if (isOn) {
+		const ret = handleTouchEnd(e);
+		handleKeyDown({ key: ret });
+		// }
+	}}
+></div>
 <div class="game-board">
 	{#each game.grid as row}
 		<div class="row">
@@ -92,18 +106,11 @@
 		color: #fff;
 	}
 
-	/* .tile.filled {
-		background-color: #776e65;
-	} */
-
-	/* Add more styles for different tile values */
-	.tile.value-2 {
-		background-color: #eee4da;
-	}
-	.tile.value-4 {
-		background-color: #ede0c8;
-	}
-	.tile.value-8 {
-		background-color: #d7c094;
+	.swipe-background {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 	}
 </style>
